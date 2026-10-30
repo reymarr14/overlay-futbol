@@ -105,6 +105,7 @@ body.ctl{background:#0f0c2b;font:16px/1.4 Antonio,sans-serif;padding:10px;max-wi
 .row{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0;align-items:center}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.four{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .ctl button{padding:8px 14px;background:var(--p);color:#fff;border:0;font:700 16px Antonio;cursor:pointer}
 .ctl button.on{background:var(--c);color:var(--d)}.ctl button.g{background:#2a7a3b}.ctl button.y{background:#ffd321;color:#222}.ctl button.r{background:#e5262b}.ctl button.k{background:#3d3490}
+.ctl .hint{font-size:13px;color:#9d97c9;min-height:18px}
 </style></head><body>
 <div id="ov"><div id="sc"></div><div id="var"></div><div id="card"></div><div id="ad"></div><div id="fx"></div></div>
 <script>
@@ -163,6 +164,28 @@ function render(){
  const ak=JSON.stringify([S.adOn,S.ads,S.adEvery,S.adShow]);if(ak!==lastAk){lastAk=ak;if(!PART||PART=='banner')ads()}
  if(S.ev.id!==lastEv){const fresh=lastEv!==null&&Date.now()-S.ev.id<8000;lastEv=S.ev.id;if(fresh&&(!PART||PART=='alertas'))fx(S.ev)}
  tick()}
+/*P*/
+const nm=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+function parseLin(txt,cut){
+ const L=txt.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),si=L.findIndex(x=>nm(x)=='suplentes'),st=[],sb=[];
+ L.forEach((x,i)=>{const m=x.match(/^(\d+)?\[([^\]]+)\]\([^)]*\)$/);if(!m)return;const arr=si>=0&&i>si?sb:st;
+  if(/^\((G|C)\)$/.test(m[2])){const p=arr[arr.length-1];if(p&&m[2]=='(C)')p.name+=' (C)';return}
+  arr.push(m[1]?{n:+m[1],name:m[2]}:{name:m[2]})});
+ if(!st.length)throw new Error('sin jugadores');
+ let k=cut>0?cut:sb.findIndex((p,i)=>i&&p.name.localeCompare(sb[i-1].name,'es')<0),auto=cut>0||k>=0;if(k<0)k=sb.length;
+ const lin={h:st.slice(0,11),a:st.slice(11),hs:sb.slice(0,k),as:sb.slice(k)};
+ let msg=`✔ Titulares ${lin.h.length} + ${lin.a.length} · suplentes ${lin.hs.length} / ${lin.as.length}`;
+ if(st.length!=22)msg+=` · ⚠ se esperaban 22 titulares y hay ${st.length}`;
+ if(!auto&&sb.length)msg+=' · ⚠ no detecté el corte de suplentes: indica cuántos son del local';
+ return{lin,msg}}
+const SL=[['Posesión',['posesion','posesion de balon']],['Tiros',['remates totales','tiros totales']],['Tiros al arco',['remates a puerta','tiros a puerta']],['Córners',['corneres','corners','tiros de esquina']],['Faltas',['faltas']]];
+function parseSt(txt){
+ const L=txt.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),num=x=>/^[\d.,]+%?$/.test(x),rows=[],miss=[],v=x=>x.endsWith('%')?x:+x.replace(',','.');
+ SL.forEach(([lab,al])=>{const i=L.findIndex((x,i)=>i&&i<L.length-1&&al.includes(nm(x))&&num(L[i-1])&&num(L[i+1]));
+  if(i<0)miss.push(lab);else rows.push({label:lab,h:v(L[i-1]),a:v(L[i+1])})});
+ if(!rows.length)throw new Error('sin estadísticas');
+ return{rows,msg:miss.length?`⚠ Cargadas ${rows.length} de 5 · falta: ${miss.join(', ')}`:'✔ 5 estadísticas cargadas'}}
+/*/P*/
 /* ---------- panel de control ---------- */
 const get=k=>k.split('.').reduce((o,x)=>o[x],S);
 const set=(p,v)=>{const k=p.split('.');let o=S;while(k.length>1)o=o[k.shift()];o[k[0]]=v;save()};
@@ -182,11 +205,11 @@ function ctl(){document.body.className='ctl';
  document.body.insertAdjacentHTML('beforeend',
  sec('Escena',`<div class="row">${[['none','Limpio'],['pres','Presentación'],['lin','Titulares'],['sup','Suplentes'],['play','Narración'],['ht','Entretiempo']].map(([s,t])=>`<button data-sc="${s}">${t}</button>`).join('')}</div>`,1)+
  sec('Partido',`${inp('Competición','comp')}${inp('Estadio','stadium')}<div class="two">${['h','a'].map(t=>`<div><b>${TN[t]}</b>${inp('Nombre',t+'.name')}${inp('Logo (URL)',t+'.logo','text','https://…')}<div class="two">${inp('Color 1',t+'.color','color')}${inp('Color 2',t+'.color2','color')}</div></div>`).join('')}</div>`)+
- sec('Alineaciones (JSON)',`<textarea id="jl" placeholder='{"h":[…],"a":[…],"hs":[…],"as":[…]}'></textarea><div class="row"><button data-a="loadlin">Cargar</button><button class="k" data-a="exlin">Ejemplo</button></div><label>Escala del panel<input type="range" min="0.5" max="1.2" step="0.05" data-k="lscale" value="${S.lscale}"></label>${inp('Narración: posición Y de los titulares','xiTop','number')}`)+
+ sec('Alineaciones (JSON)',`<textarea id="jl" placeholder='Pega aquí el texto de alineaciones de Flashscore (o un JSON)'></textarea><div class="row"><button data-a="loadlin">Cargar</button><button class="k" data-a="exlin">Ejemplo JSON</button><input id="cut" type="number" placeholder="suplentes del local (auto)" style="width:210px"></div><div id="ml" class="hint"></div><label>Escala del panel<input type="range" min="0.5" max="1.2" step="0.05" data-k="lscale" value="${S.lscale}"></label>${inp('Narración: posición Y de los titulares','xiTop','number')}`)+
  sec('Reloj',`<div class="row"><button class="g" data-a="start">Iniciar</button><button data-a="pause">Pausar</button><button class="k" data-a="setmin">Fijar minuto</button><input id="min" type="number" value="0" style="width:80px"></div><div class="two">${inp('Tiempo (1T, 2T, ET…)','period')}${inp('Añadido (ej. 3)','added')}</div>`,1)+
  sec('Marcador y eventos',`<label>Jugador / texto (gol, tarjetas, subtítulo del VAR)<input id="who"></label>${evb('h')}${evb('a')}<div class="row"><b style="width:56px">VAR</b><button data-a="varon">Iniciar VAR</button><button class="k" data-a="varoff">Cerrar VAR</button><button class="k" data-a="reset">Reiniciar partido</button></div>`,1)+
  sec('Cambios',`${swb('h')}${swb('a')}`)+
- sec('Estadísticas (JSON)',`<textarea id="js" placeholder='[{"label":"Posesión","h":58,"a":42}]'></textarea><div class="row"><button data-a="loadst">Cargar</button><button class="k" data-a="exst">Ejemplo</button></div>`)+
+ sec('Estadísticas (JSON)',`<textarea id="js" placeholder='Pega aquí el texto de estadísticas de Flashscore (o un JSON)'></textarea><div class="row"><button data-a="loadst">Cargar</button><button class="k" data-a="exst">Ejemplo JSON</button></div><div id="ms" class="hint"></div>`)+
  sec('Publicidad',`<label>Una por línea: URL de imagen o texto<textarea data-ads>${esc(S.ads.join('\n'))}</textarea></label><div class="two">${inp('Cada (seg)','adEvery','number')}${inp('Visible (seg)','adShow','number')}</div>${chk('Banner activo','adOn')}`)+
  sec('Partes (vertical / TikTok)',`${chk('Marcador siempre visible','sbAlways')}<p style="font-size:13px;color:#9d97c9">Agrega cada URL como fuente de navegador con el tamaño indicado. Marcador, presentación y estadísticas se achican solas si la fuente es más angosta.</p>${PL.map(([n,z])=>`<label>${n} · ${z}<span class="row"><input readonly value="${B}?parte=${n}" onclick="this.select()" style="flex:1"><button class="k" data-a="copy" data-u="${B}?parte=${n}">Copiar</button></span></label>`).join('')}`));
  document.body.oninput=e=>{const t=e.target;if(t.dataset.k)set(t.dataset.k,t.type=='checkbox'?t.checked:(t.type=='number'||t.type=='range')?+t.value:t.value);
@@ -212,8 +235,8 @@ function ctl(){document.body.className='ctl';
   else if(d.a=='copy'){const u=d.u;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).catch(()=>prompt('Copia la URL:',u))}
   else if(d.a=='exlin')$('#jl').value=EX_LIN;
   else if(d.a=='exst')$('#js').value=EX_ST;
-  else if(d.a=='loadlin'){try{const j=JSON.parse($('#jl').value);S.lin={h:j.h||j.home||[],a:j.a||j.away||[],hs:j.hs||[],as:j.as||[]};save();fillSubs()}catch(x){alert('JSON de alineaciones no válido')}}
-  else if(d.a=='loadst'){try{S.stats=JSON.parse($('#js').value);save()}catch(x){alert('JSON de estadísticas no válido')}}};
+  else if(d.a=='loadlin'){const v=$('#jl').value.trim(),o=$('#ml');try{if(/^[\[{]/.test(v)){const j=JSON.parse(v);S.lin={h:j.h||j.home||[],a:j.a||j.away||[],hs:j.hs||[],as:j.as||[]};o.textContent='✔ JSON cargado'}else{const r=parseLin(v,+$('#cut').value);S.lin=r.lin;o.textContent=r.msg}save();fillSubs()}catch(x){o.textContent='✖ No pude leer el texto de alineaciones'}}
+  else if(d.a=='loadst'){const v=$('#js').value.trim(),o=$('#ms');try{if(/^[\[{]/.test(v)){S.stats=JSON.parse(v);o.textContent='✔ JSON cargado'}else{const r=parseSt(v);S.stats=r.rows;o.textContent=r.msg}save()}catch(x){o.textContent='✖ No pude leer el texto de estadísticas'}}};
  $('#ov').remove();fillSubs();render()}
 if(CTL)ctl();render();if(PART)addEventListener('resize',render);
 </script></body></html>
