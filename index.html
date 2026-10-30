@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><title>Sporteros · Overlay fútbol</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Antonio:wght@500;700&family=Big+Shoulders+Display:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#604ee2;--c:#25c2ff;--g:#edeced;--d:#17123d}
+*{box-sizing:border-box;margin:0}
+html,body{background:transparent;font-family:Antonio,sans-serif;color:#fff}
+#ov{width:1920px;height:1080px;position:relative;overflow:hidden}
+#sc{position:absolute;inset:0}
+@keyframes rise{from{opacity:0;margin-top:70px}}
+.in>*{animation:rise .8s cubic-bezier(.2,.8,.2,1)}
+.lgo{width:var(--s);height:var(--s);object-fit:contain;flex:none}
+.ph{display:grid;place-items:center;background:var(--tc);border-radius:50%;font:800 calc(var(--s)*.4) 'Big Shoulders Display';font-style:normal}
+.mid-c{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:linear-gradient(160deg,#1d1650,#120e33);box-shadow:0 30px 80px #0009}
+/* presentación */
+.pres{width:1240px;overflow:hidden;--s:240px}
+.tt{font:800 44px 'Big Shoulders Display';letter-spacing:.04em;background:var(--p);padding:12px 36px;text-align:center}
+.vs{display:flex;align-items:center;justify-content:space-around;padding:50px 30px}
+.tm{width:440px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.tm b{font:800 66px/1 'Big Shoulders Display'}
+.v{font:800 90px 'Big Shoulders Display';color:var(--c)}
+.st{background:var(--g);color:var(--d);text-align:center;font:700 36px Antonio;padding:12px}
+/* alineaciones */
+.lin{display:flex;gap:30px;--s:90px;background:none;box-shadow:none}
+.col{width:560px;background:linear-gradient(#1d1650,#120e33);border-top:10px solid var(--tc)}
+.col .hd{display:flex;align-items:center;gap:20px;padding:18px 26px;font:800 50px 'Big Shoulders Display'}
+.col p,.xi p{display:flex;gap:16px;padding:7px 26px;font:500 34px Antonio;border-top:1px solid #ffffff18}
+.col em,.xi em{font-style:normal;width:46px;color:var(--c);font-weight:700}
+/* narración */
+.sb{position:absolute;top:28px;left:50%;transform:translateX(-50%);display:flex;height:92px;--s:62px;box-shadow:0 10px 30px #0008}
+.sb>div{display:flex;align-items:center;gap:14px;padding:0 24px;background:var(--d)}
+.sb .side{width:380px;font:700 42px Antonio;border-bottom:8px solid var(--tc)}
+.sb .side.r{flex-direction:row-reverse}
+.sb .sc{font:800 72px 'Big Shoulders Display';background:var(--p);width:96px;justify-content:center;padding:0}
+.sb .mid{flex-direction:column;justify-content:center;gap:0;background:var(--g);color:var(--d);width:180px;padding:0}
+.mid b{font:800 46px/1 'Big Shoulders Display'}.mid small{font:700 22px Antonio}
+.xi{position:absolute;top:150px;width:310px;background:#17123dee;border-top:8px solid var(--tc);--s:68px}
+.xi.l{left:30px}.xi.r{right:30px}
+.xi .hd{display:flex;align-items:center;gap:14px;padding:12px 16px;font:700 34px Antonio}
+.xi p{font-size:29px;padding:6px 16px;gap:12px}
+#fld{position:absolute;left:50%;top:210px;transform:translateX(-50%);width:1000px;height:600px;border:0;border-radius:8px;background:#0b6b3a;display:none}
+#card{position:absolute;top:130px;left:50%;transform:translate(-50%,-30px);opacity:0;transition:.4s;display:flex;align-items:center;gap:18px;background:var(--d);padding:10px 34px 10px 18px;font:700 38px Antonio;border-left:10px solid var(--tc,var(--c))}
+#card.on{opacity:1;transform:translate(-50%,0)}
+.cd{width:28px;height:40px;border-radius:4px}.cd.yellow{background:#ffd321}.cd.red{background:#e5262b}
+/* entretiempo */
+.ht{width:1100px;--s:80px}
+.ht .hd{display:flex;justify-content:space-between;align-items:center;padding:20px 36px;font:800 52px 'Big Shoulders Display'}
+.ht .hd div{display:flex;align-items:center;gap:18px}
+.r{display:grid;grid-template-columns:90px 1fr 280px 1fr 90px;align-items:center;gap:14px;padding:11px 28px;font:500 32px Antonio;text-align:center}
+.bar{height:16px;background:#ffffff1c;display:flex;justify-content:flex-end}.bar.rt{justify-content:flex-start}.bar i{height:100%}
+/* publicidad */
+#ad{position:absolute;bottom:36px;left:50%;transform:translate(-50%,40px);width:920px;height:120px;background:#fff;opacity:0;transition:.6s;display:grid;place-items:center;color:var(--d);font:700 44px Antonio;border-bottom:8px solid var(--p)}
+#ad.on{opacity:1;transform:translate(-50%,0)}#ad img{max-width:100%;max-height:100%;object-fit:contain}
+/* gol / penal */
+#fx{position:absolute;inset:0;display:none;place-items:center;text-align:center;background:radial-gradient(circle,#604ee2cc,#17123dee 70%);--s:130px}
+#fx.penal{background:radial-gradient(circle,#25c2ffbb,#17123dee 70%)}
+#fx.on{display:grid;animation:fxin 6s forwards}
+#fx::before{content:'';position:absolute;inset:0;background:#fff;animation:fl .6s forwards}
+@keyframes fxin{0%{opacity:0}5%{opacity:1}90%{opacity:1}100%{opacity:0}}
+@keyframes fl{from{opacity:.9}to{opacity:0}}
+@keyframes pop{from{transform:scale(.2) rotate(-6deg);opacity:0}to{transform:none;opacity:1}}
+#fx .big{font:800 380px/.9 'Big Shoulders Display';letter-spacing:.02em;animation:pop .9s cubic-bezier(.2,1.6,.3,1) both}
+#fx .who{display:flex;justify-content:center;align-items:center;gap:24px;font:700 70px Antonio;animation:rise .8s .5s both}
+/* panel de control */
+body.ctl{background:#0f0c2b;font:16px/1.4 Antonio,sans-serif;padding:20px;max-width:900px;margin:auto}
+.ctl h1{font:800 34px 'Big Shoulders Display'}.ctl h2{font:700 20px Antonio;color:var(--c);margin-bottom:8px}
+.ctl .hint{color:#9d97c9;font-size:14px}
+.ctl section{background:#1a1545;padding:14px;margin:12px 0;border-left:6px solid var(--p)}
+.ctl label{display:block;margin:6px 0;font-size:14px}
+.ctl input,.ctl textarea{width:100%;padding:7px;background:#0f0c2b;color:#fff;border:1px solid #3d3490;font:15px Antonio}
+.ctl input[type=checkbox]{width:auto}.ctl input[type=color]{height:34px;padding:2px}.ctl textarea{height:90px;font:13px monospace}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0;align-items:center}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ctl button{padding:9px 16px;background:var(--p);color:#fff;border:0;font:700 16px Antonio;cursor:pointer}
+.ctl button.on{background:var(--c);color:var(--d)}.ctl button.g{background:#2a7a3b}.ctl button.y{background:#ffd321;color:#222}.ctl button.r{background:#e5262b}
+</style></head><body>
+<div id="ov"><div id="sc"></div><iframe id="fld"></iframe><div id="card"></div><div id="ad"></div><div id="fx"></div></div>
+<script>
+const K='sporteros_futbol_v1',CTL=location.search.includes('control');
+const $=s=>document.querySelector(s),esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const D={scene:'none',comp:'Liga 1 · Fecha 12',stadium:'Estadio Nacional',
+h:{name:'Equipo Local',logo:'',color:'#604ee2'},a:{name:'Equipo Visita',logo:'',color:'#25c2ff'},
+sh:0,sa:0,period:'1T',added:'',clock:{base:0,t0:null},lin:{h:[],a:[]},stats:[],
+field:'',showField:true,ads:[],adEvery:60,adShow:10,adOn:false,ev:{id:0}};
+const load=j=>Object.assign({},D,JSON.parse(j||'{}'));
+let S=load(localStorage.getItem(K));
+const save=()=>{localStorage.setItem(K,JSON.stringify(S));render()};
+addEventListener('storage',e=>{if(e.key===K){S=load(e.newValue);render()}});
+const lg=t=>t.logo?`<img class="lgo" src="${esc(t.logo)}" alt="">`:`<i class="lgo ph" style="--tc:${esc(t.color)}">${esc(t.name.slice(0,2))}</i>`;
+const th=t=>`style="--tc:${esc(t.color)}"`;
+const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const xi=t=>(S.lin[t]||[]).slice(0,11).map(p=>`<p><em>${esc(p.n)}</em>${esc(p.name)}</p>`).join('');
+const SC={
+pres:()=>`<div class="mid-c pres"><div class="tt">${esc(S.comp)}</div><div class="vs"><div class="tm">${lg(S.h)}<b>${esc(S.h.name)}</b></div><span class="v">VS</span><div class="tm">${lg(S.a)}<b>${esc(S.a.name)}</b></div></div><div class="st">${esc(S.stadium)}</div></div>`,
+lin:()=>`<div class="mid-c lin">${['h','a'].map(t=>`<div class="col" ${th(S[t])}><div class="hd">${lg(S[t])}${esc(S[t].name)}</div>${(S.lin[t]||[]).map(p=>`<p><em>${esc(p.n)}</em>${esc(p.name)}</p>`).join('')}</div>`).join('')}</div>`,
+play:()=>`<div class="sb"><div class="side" ${th(S.h)}>${lg(S.h)}${esc(S.h.name)}</div><div class="sc">${S.sh}</div><div class="mid"><b id="clk"></b><small>${esc(S.period)} ${esc(S.added)}</small></div><div class="sc">${S.sa}</div><div class="side r" ${th(S.a)}>${lg(S.a)}${esc(S.a.name)}</div></div>`+
+ ['h','a'].map((t,i)=>`<div class="xi ${i?'r':'l'}" ${th(S[t])}><div class="hd">${lg(S[t])}${esc(S[t].name)}</div>${xi(t)}</div>`).join(''),
+ht:()=>`<div class="mid-c ht"><div class="tt">${esc(S.comp)} · Entretiempo ${S.sh} - ${S.sa}</div><div class="hd"><div>${lg(S.h)}${esc(S.h.name)}</div><div>${esc(S.a.name)}${lg(S.a)}</div></div>`+
+ S.stats.map(r=>{const a=parseFloat(r.h)||0,b=parseFloat(r.a)||0,p=a+b?a/(a+b)*100:50;return `<div class="r"><b>${esc(r.h)}</b><div class="bar"><i style="width:${p}%;background:${esc(S.h.color)}"></i></div><span>${esc(r.label)}</span><div class="bar rt"><i style="width:${100-p}%;background:${esc(S.a.color)}"></i></div><b>${esc(r.a)}</b></div>`}).join('')+`<div style="height:20px"></div></div>`};
+function tick(){const c=$('#clk');if(c)c.textContent=fmt(S.clock.base+(S.clock.t0?(Date.now()-S.clock.t0)/1000:0))}
+setInterval(()=>{if(!CTL)tick()},250);
+function fx(e){const t=S[e.side]||S.h;
+ if(e.type=='yellow'||e.type=='red'){const c=$('#card');c.style.setProperty('--tc',t.color);c.innerHTML=`<i class="cd ${e.type}"></i><span>${e.type=='red'?'Roja':'Amarilla'} · ${esc(e.text||'')} ${esc(t.name)}</span>`;c.classList.add('on');setTimeout(()=>c.classList.remove('on'),5000);return}
+ const f=$('#fx');f.className='';void f.offsetWidth;f.className='on '+e.type;
+ f.innerHTML=`<div><div class="big">${e.type=='goal'?'GOOOL':'PENAL'}</div><div class="who">${lg(t)}<b>${esc(t.name)}</b><span>${esc(e.text||'')}</span></div></div>`;
+ setTimeout(()=>f.className='',6000)}
+let prev='',lastEv=null,lastAk='',ai=0,at,ah;
+function ads(){clearInterval(at);clearTimeout(ah);const a=$('#ad');a.classList.remove('on');if(!S.adOn||!S.ads.length)return;
+ const go=()=>{const x=S.ads[ai++%S.ads.length];a.innerHTML=/^(https?:|data:)/.test(x)?`<img src="${esc(x)}" alt="">`:`<span>${esc(x)}</span>`;a.classList.add('on');ah=setTimeout(()=>a.classList.remove('on'),S.adShow*1000)};
+ go();at=setInterval(go,Math.max(S.adEvery,S.adShow+2)*1000)}
+function render(){
+ if(CTL){document.querySelectorAll('[data-sc]').forEach(b=>b.classList.toggle('on',b.dataset.sc==S.scene));return}
+ const sc=$('#sc');sc.innerHTML=SC[S.scene]?SC[S.scene]():'';
+ if(S.scene!==prev){prev=S.scene;sc.className='';void sc.offsetWidth;sc.className='in';setTimeout(()=>sc.className='',1300)}
+ const f=$('#fld'),show=S.scene=='play'&&S.showField&&S.field;f.style.display=show?'block':'none';
+ if(show&&f.getAttribute('src')!==S.field)f.src=S.field;
+ const ak=JSON.stringify([S.adOn,S.ads,S.adEvery,S.adShow]);if(ak!==lastAk){lastAk=ak;ads()}
+ if(S.ev.id!==lastEv){const fresh=lastEv!==null&&Date.now()-S.ev.id<8000;lastEv=S.ev.id;if(fresh)fx(S.ev)}
+ tick()}
+/* ---------- panel de control ---------- */
+const get=k=>k.split('.').reduce((o,x)=>o[x],S);
+const set=(p,v)=>{const k=p.split('.');let o=S;while(k.length>1)o=o[k.shift()];o[k[0]]=v;save()};
+const inp=(l,k,ty='text',ph='')=>`<label>${l}<input type="${ty}" data-k="${k}" value="${esc(get(k))}" placeholder="${ph}"></label>`;
+const EX_LIN='{"h":[{"n":1,"name":"Portero"},{"n":2,"name":"Lateral D."},{"n":4,"name":"Central"},{"n":5,"name":"Central"},{"n":3,"name":"Lateral I."},{"n":6,"name":"Volante"},{"n":8,"name":"Interior"},{"n":10,"name":"Enganche"},{"n":7,"name":"Extremo"},{"n":9,"name":"Delantero"},{"n":11,"name":"Extremo"}],"a":[{"n":1,"name":"Portero"}]}';
+const EX_ST='[{"label":"Posesión","h":58,"a":42},{"label":"Tiros","h":9,"a":5},{"label":"Tiros al arco","h":4,"a":2},{"label":"Córners","h":6,"a":3},{"label":"Faltas","h":7,"a":10}]';
+function ctl(){document.body.className='ctl';
+ document.body.insertAdjacentHTML('beforeend',`<h1>Sporteros · Control de fútbol</h1>
+<p class="hint">Fuente de navegador en OBS: esta URL sin ?control, a 1920×1080. Panel: abrir con ?control (como Dock personalizado de OBS para compartir datos).</p>
+<section><h2>Escena</h2><div class="row">${[['none','Limpio'],['pres','Presentación'],['lin','Alineaciones'],['play','Narración'],['ht','Entretiempo']].map(([s,t])=>`<button data-sc="${s}">${t}</button>`).join('')}</div></section>
+<section><h2>Partido</h2>${inp('Competición','comp')}${inp('Estadio','stadium')}<div class="two">${['h','a'].map(t=>`<div><b>${t=='h'?'Local':'Visita'}</b>${inp('Nombre',t+'.name')}${inp('Logo (URL)',t+'.logo','text','https://…')}${inp('Color',t+'.color','color')}</div>`).join('')}</div></section>
+<section><h2>Marcador y eventos</h2><label>Jugador (opcional, para gol y tarjetas)<input id="who"></label>
+${['h','a'].map(t=>`<div class="row"><b style="width:60px">${t=='h'?'Local':'Visita'}</b><button class="g" data-a="goal" data-t="${t}">Gol +1</button><button data-a="dec" data-t="${t}">Gol −1</button><button data-a="penal" data-t="${t}">Penal</button><button class="y" data-a="yellow" data-t="${t}">Amarilla</button><button class="r" data-a="red" data-t="${t}">Roja</button></div>`).join('')}</section>
+<section><h2>Reloj</h2><div class="row"><button class="g" data-a="start">Iniciar</button><button data-a="pause">Pausar</button><button data-a="setmin">Fijar minuto:</button><input id="min" type="number" value="0" style="width:80px"></div><div class="two">${inp('Tiempo (1T, 2T, ET…)','period')}${inp('Añadido (+3)','added')}</div></section>
+<section><h2>Alineaciones (JSON)</h2><textarea id="jl" placeholder='{"h":[{"n":1,"name":"…"}],"a":[…]}'></textarea><div class="row"><button data-a="loadlin">Cargar alineaciones</button><button data-a="exlin">Ver ejemplo</button></div></section>
+<section><h2>Estadísticas de entretiempo (JSON)</h2><textarea id="js" placeholder='[{"label":"Posesión","h":58,"a":42}]'></textarea><div class="row"><button data-a="loadst">Cargar estadísticas</button><button data-a="exst">Ver ejemplo</button></div></section>
+<section><h2>Gráfico de campo</h2>${inp('URL a embeber (AiScore, 365Scores…)','field','text','https://…')}<label><input type="checkbox" data-k="showField" ${S.showField?'checked':''}> Mostrar en Narración</label></section>
+<section><h2>Publicidad</h2><label>Una por línea: URL de imagen o texto<textarea data-ads>${esc(S.ads.join('\n'))}</textarea></label><div class="two">${inp('Cada (segundos)','adEvery','number')}${inp('Visible (segundos)','adShow','number')}</div><label><input type="checkbox" data-k="adOn" ${S.adOn?'checked':''}> Banner activo</label></section>`);
+ document.body.oninput=e=>{const t=e.target;if(t.dataset.k)set(t.dataset.k,t.type=='checkbox'?t.checked:t.type=='number'?+t.value:t.value);
+  if(t.dataset.ads!==undefined){S.ads=t.value.split('\n').map(x=>x.trim()).filter(Boolean);save()}};
+ document.body.onclick=e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset,t=d.t,who=$('#who').value.trim();
+  const ev=type=>{S.ev={id:Date.now(),type,side:t,text:who};save()};
+  if(d.sc){S.scene=d.sc;save()}
+  else if(d.a=='goal'){S['s'+t]++;ev('goal')}
+  else if(d.a=='dec'){S['s'+t]=Math.max(0,S['s'+t]-1);save()}
+  else if(['penal','yellow','red'].includes(d.a))ev(d.a);
+  else if(d.a=='start'){if(!S.clock.t0)S.clock.t0=Date.now();save()}
+  else if(d.a=='pause'){if(S.clock.t0){S.clock.base+=(Date.now()-S.clock.t0)/1000;S.clock.t0=null}save()}
+  else if(d.a=='setmin'){S.clock.base=(+$('#min').value||0)*60;if(S.clock.t0)S.clock.t0=Date.now();save()}
+  else if(d.a=='exlin')$('#jl').value=EX_LIN;
+  else if(d.a=='exst')$('#js').value=EX_ST;
+  else if(d.a=='loadlin'){try{const j=JSON.parse($('#jl').value);S.lin={h:j.h||j.home||[],a:j.a||j.away||[]};save()}catch(x){alert('JSON de alineaciones no válido')}}
+  else if(d.a=='loadst'){try{S.stats=JSON.parse($('#js').value);save()}catch(x){alert('JSON de estadísticas no válido')}}};
+ $('#ov').remove();$('#jl').value=JSON.stringify(S.lin);$('#js').value=JSON.stringify(S.stats)}
+if(CTL)ctl();render();
+</script></body></html>
