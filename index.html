@@ -10,6 +10,8 @@ html,body{background:transparent;font-family:Antonio,sans-serif;color:#fff}
 body.pt{overflow:hidden}body.pt #ov{width:100vw;height:100vh}
 body.pt .sb{top:0}body.pt .xi{position:static!important;width:340px}
 body.pt:not(.pt-alertas) #var,body.pt:not(.pt-alertas) #card,body.pt:not(.pt-alertas) #fx,body.pt:not(.pt-banner) #ad{display:none!important}
+body.pt-marcador .sb{transform:translateX(-50%) scale(var(--k,1));transform-origin:50% 0}
+body.pt .pres,body.pt .ht{transform:translate(-50%,-50%) scale(var(--k,1))}
 body.pt-banner #ad{left:0;bottom:auto;top:0;transform:none!important}
 body.pt-alertas #card{top:auto;bottom:20px;transform:translate(-50%,30px)}body.pt-alertas #card.on{transform:translate(-50%,0)}body.pt-alertas #var{top:30%}
 #sc{position:absolute;inset:0}
@@ -19,24 +21,19 @@ body.pt-alertas #card{top:auto;bottom:20px;transform:translate(-50%,30px)}body.p
 .ph{display:grid;place-items:center;background:var(--c1);color:var(--c2);border:4px solid var(--c2);border-radius:50%;font:800 calc(var(--s)*.4) 'Big Shoulders Display';font-style:normal}
 .mid-c{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:linear-gradient(160deg,#1d1650,#120e33);box-shadow:0 30px 80px #0009}
 .tt{font:800 44px 'Big Shoulders Display';letter-spacing:.04em;background:var(--p);padding:12px 36px;text-align:center}
-.pres{width:1240px;overflow:hidden;--s:240px}
+.pres{width:1100px;overflow:hidden;--s:240px}
 .vs{display:flex;align-items:center;justify-content:space-around;padding:50px 30px}
-.tm{width:440px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.tm{width:400px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
 .tm b{font:800 66px/1 'Big Shoulders Display'}
 .v{font:800 90px 'Big Shoulders Display';color:var(--c)}
 .st{background:var(--g);color:var(--d);text-align:center;font:700 36px Antonio;padding:12px}
 /* alineaciones */
-.lin{top:48%;display:flex;gap:18px;align-items:flex-start;--s:80px;background:none;box-shadow:none;transform:translate(-50%,-50%) scale(var(--z,1))}
+.lin{display:flex;gap:18px;align-items:flex-start;--s:80px;background:none;box-shadow:none;transform:translate(-50%,-50%) scale(var(--z,1))}
 .col{width:400px;background:linear-gradient(#1d1650,#120e33);border-top:10px solid var(--c1)}
 .col .hd{display:flex;align-items:center;gap:16px;padding:14px 20px;font:800 44px/1 'Big Shoulders Display';border-bottom:4px solid var(--c2)}
-.tcol{width:400px}
-.subs{margin-top:8px;background:#120e33f2;border-top:6px solid var(--c2)}
-.sg{display:grid;grid-template-columns:1fr 1fr}
-.sg p{min-width:0}.sg p span{overflow:hidden;text-overflow:ellipsis}
-.subs p em:empty{display:none}
+p em:empty{display:none}
 .hs{padding:10px 16px;font:700 26px Antonio;color:var(--c);letter-spacing:.08em;text-transform:uppercase}
-p.r0,.col p,.xi p,.subs p{display:flex;align-items:center;gap:12px;padding:6px 20px;font:500 31px Antonio;border-top:1px solid #ffffff18;white-space:nowrap}
-.subs p{font-size:26px;padding:5px 12px;gap:8px;color:#e6e3f7}
+p.r0,.col p,.xi p{display:flex;align-items:center;gap:12px;padding:6px 20px;font:500 31px Antonio;border-top:1px solid #ffffff18;white-space:nowrap}
 p em{font-style:normal;width:40px;flex:none;color:var(--c);font-weight:700}
 p em.up{color:#3ddc84}
 p.out{text-decoration:line-through;opacity:.45}
@@ -129,19 +126,19 @@ const fmt=s=>{s=Math.max(0,Math.floor(s));return String(Math.floor(s/60)).padSta
 const row=p=>`<p class="${p.out?'out':''}"><em class="${p.in?'up':''}">${p.in?'▲':esc(p.n??'')}</em><span>${esc(p.name)}</span></p>`;
 const xi=t=>(S.lin[t]||[]).slice(0,11).map(row).join('');
 const col=t=>`<div class="col" ${th(S[t])}><div class="hd">${lg(S[t])}${esc(S[t].name)}</div>${xi(t)}</div>`;
-const sbp=t=>{const b=S.lin[t+'s']||[];return b.length?`<div class="subs" ${th(S[t])}><div class="hs">Suplentes</div><div class="sg">${b.map(row).join('')}</div></div>`:''};
-const tcol=t=>`<div class="tcol" ${th(S[t])}>${col(t)}${sbp(t)}</div>`;
+const supcol=t=>`<div class="col" ${th(S[t])}><div class="hd">${lg(S[t])}${esc(S[t].name)}</div><div class="hs">Suplentes</div>${(S.lin[t+'s']||[]).map(row).join('')}</div>`;
 const cnt=t=>{const c=S.cards[t];return `<div class="cnt">${c.y?`<i class="chip y">${c.y}</i>`:''}${c.r?`<i class="chip r">${c.r}</i>`:''}</div>`};
 const SC={
 pres:()=>`<div class="mid-c pres"><div class="tt">${esc(S.comp)}</div><div class="vs"><div class="tm">${lg(S.h)}<b>${esc(S.h.name)}</b></div><span class="v">VS</span><div class="tm">${lg(S.a)}<b>${esc(S.a.name)}</b></div></div><div class="st">${esc(S.stadium)}</div></div>`,
-lin:()=>`<div class="mid-c lin" style="--z:${S.lscale}">${tcol('h')}${tcol('a')}</div>`,
+lin:()=>`<div class="mid-c lin" style="--z:${S.lscale}">${col('h')}${col('a')}</div>`,
+sup:()=>`<div class="mid-c lin" style="--z:${S.lscale}">${supcol('h')}${supcol('a')}</div>`,
 play:()=>`<div class="sb"><div class="side" ${th(S.h)}>${lg(S.h)}${esc(S.h.name)}</div><div class="sc">${S.sh}${cnt('h')}</div><div class="mid"><div class="tm2"><b id="clk"></b>${S.added?`<span class="add">+${esc(String(S.added).replace(/^\+/,''))}</span>`:''}</div><small>${esc(S.period)}</small></div><div class="sc">${S.sa}${cnt('a')}</div><div class="side r" ${th(S.a)}>${lg(S.a)}${esc(S.a.name)}</div></div>`+
  ['h','a'].map((t,i)=>`<div class="xi ${i?'r':'l'}" style="${cs(S[t])};top:${S.xiTop}px"><div class="hd">${lg(S[t])}${esc(S[t].name)}</div>${xi(t)}</div>`).join(''),
 ht:()=>`<div class="mid-c ht"><div class="tt">${esc(S.comp)}<small>${esc(S.stadium)}</small></div><div class="hd"><div>${lg(S.h)}${esc(S.h.name)}</div><div class="hm"><b>${S.sh} - ${S.sa}</b><small>Entretiempo</small></div><div>${esc(S.a.name)}${lg(S.a)}</div></div>`+
  S.stats.map(r=>{const a=parseFloat(r.h)||0,b=parseFloat(r.a)||0,p=a+b?a/(a+b)*100:50;return `<div class="sr"><b>${esc(r.h)}</b><div class="bar"><i style="width:${p}%;background:linear-gradient(90deg,${esc(S.h.color2)},${esc(S.h.color)})"></i></div><span>${esc(r.label)}</span><div class="bar rt"><i style="width:${100-p}%;background:linear-gradient(90deg,${esc(S.a.color)},${esc(S.a.color2)})"></i></div><b>${esc(r.a)}</b></div>`}).join('')+`<div style="height:20px"></div></div>`};
 const pl=()=>{const t=document.createElement('div');t.innerHTML=SC.play();return[...t.children].map(e=>e.outerHTML)};
-const PT={marcador:()=>pl()[0],'titulares-local':()=>pl()[1],'titulares-visita':()=>pl()[2],alineaciones:SC.lin,presentacion:SC.pres,estadisticas:SC.ht};
-const VIS=p=>({marcador:S.scene=='play'||S.sbAlways,'titulares-local':S.scene=='play','titulares-visita':S.scene=='play',alineaciones:S.scene=='lin',presentacion:S.scene=='pres',estadisticas:S.scene=='ht'})[p];
+const PT={marcador:()=>pl()[0],'titulares-local':()=>pl()[1],'titulares-visita':()=>pl()[2],alineaciones:()=>S.scene=='sup'?SC.sup():SC.lin(),presentacion:SC.pres,estadisticas:SC.ht};
+const VIS=p=>({marcador:S.scene=='play'||S.sbAlways,'titulares-local':S.scene=='play','titulares-visita':S.scene=='play',alineaciones:S.scene=='lin'||S.scene=='sup',presentacion:S.scene=='pres',estadisticas:S.scene=='ht'})[p];
 function tick(){const c=$('#clk');if(c)c.textContent=fmt(S.clock.base+(S.clock.t0?(Date.now()-S.clock.t0)/1000:0))}
 setInterval(()=>{if(!CTL)tick()},250);
 function fx(e){const t=S[e.side]||S.h;
@@ -158,7 +155,8 @@ function ads(){clearInterval(at);clearTimeout(ah);const a=$('#ad');a.classList.r
  go();at=setInterval(go,Math.max(S.adEvery,S.adShow+2)*1000)}
 function render(){
  if(CTL){document.querySelectorAll('[data-sc]').forEach(b=>b.classList.toggle('on',b.dataset.sc==S.scene));return}
- const sc=$('#sc'),vis=PART?!!VIS(PART):!!SC[S.scene],key=PART?+vis:S.scene;
+ const sc=$('#sc'),vis=PART?!!VIS(PART):!!SC[S.scene],key=PART?(vis?(PART=='alineaciones'?S.scene:1):0):S.scene;
+ if(PART){const W={marcador:1200,presentacion:1120,estadisticas:1120}[PART];document.body.style.setProperty('--k',W?Math.min(1,innerWidth/W):1)}
  sc.innerHTML=PART?(vis&&PT[PART]?PT[PART]():''):(SC[S.scene]?SC[S.scene]():'');
  if(key!==prev){prev=key;sc.className='';void sc.offsetWidth;sc.className='on';setTimeout(()=>sc.className='',1300)}
  const v=$('#var');if(S.varOn){if(!v.classList.contains('on')||v.dataset.t!==S.varTxt){v.innerHTML=`<div class="vb"><b>VAR</b><span>${esc(S.varTxt||'Revisión en curso')}</span><i></i></div>`;v.dataset.t=S.varTxt;v.classList.add('on')}}else v.classList.remove('on');
@@ -172,7 +170,7 @@ const inp=(l,k,ty='text',ph='')=>`<label>${l}<input type="${ty}" data-k="${k}" v
 const chk=(l,k)=>`<label><input type="checkbox" data-k="${k}" ${get(k)?'checked':''}> ${l}</label>`;
 const sec=(t,b,o)=>`<details ${o?'open':''}><summary>${t}</summary><div>${b}</div></details>`;
 const TN={h:'Local',a:'Visita'};
-const B=location.href.split(/[?#]/)[0],PL=[['marcador','1200×130'],['titulares-local','340×540'],['titulares-visita','340×540'],['alineaciones','860×920'],['presentacion','1260×500'],['estadisticas','1120×560'],['banner','920×130'],['alertas','1080×590 (o el de tu recuadro)']];
+const B=location.href.split(/[?#]/)[0],PL=[['marcador','1080×130'],['titulares-local','340×540'],['titulares-visita','340×540'],['alineaciones','860×680'],['presentacion','1080×580'],['estadisticas','1080×600'],['banner','920×130'],['alertas','1080×590 (o el de tu recuadro)']];
 const EX_LIN='{"h":[{"n":1,"name":"Portero"},{"n":2,"name":"Lateral D."},{"n":4,"name":"Central"},{"n":5,"name":"Central"},{"n":3,"name":"Lateral I."},{"n":6,"name":"Volante"},{"n":8,"name":"Interior"},{"n":10,"name":"Enganche (C)"},{"n":7,"name":"Extremo"},{"n":9,"name":"Delantero"},{"n":11,"name":"Extremo"}],"a":[],"hs":[{"name":"Suplente 1"},{"name":"Suplente 2"}],"as":[]}';
 const EX_ST='[{"label":"Posesión","h":58,"a":42},{"label":"Tiros","h":9,"a":5},{"label":"Tiros al arco","h":4,"a":2},{"label":"Córners","h":6,"a":3},{"label":"Faltas","h":7,"a":10}]';
 function fillSubs(){['h','a'].forEach(t=>{const f=(S.lin[t]||[]).slice(0,11),b=S.lin[t+'s']||[];
@@ -182,15 +180,15 @@ function ctl(){document.body.className='ctl';
  const evb=t=>`<div class="row"><b style="width:56px">${TN[t]}</b><button class="g" data-a="goal" data-t="${t}">Gol +1</button><button class="k" data-a="dec" data-t="${t}">−1</button><button data-a="penal" data-t="${t}">Penal</button><button class="y" data-a="yellow" data-t="${t}">Amarilla</button><button class="r" data-a="red" data-t="${t}">Roja</button><button class="k" data-a="ydec" data-t="${t}">−A</button><button class="k" data-a="rdec" data-t="${t}">−R</button></div>`;
  const swb=t=>`<div class="row"><b style="width:56px">${TN[t]}</b></div><div class="two"><label>Sale<select id="o${t}"></select></label><label>Entra<select id="i${t}"></select></label></div><button data-a="sub" data-t="${t}">Registrar cambio ${TN[t]}</button>`;
  document.body.insertAdjacentHTML('beforeend',
- sec('Escena',`<div class="row">${[['none','Limpio'],['pres','Presentación'],['lin','Alineaciones'],['play','Narración'],['ht','Entretiempo']].map(([s,t])=>`<button data-sc="${s}">${t}</button>`).join('')}</div>`,1)+
+ sec('Escena',`<div class="row">${[['none','Limpio'],['pres','Presentación'],['lin','Titulares'],['sup','Suplentes'],['play','Narración'],['ht','Entretiempo']].map(([s,t])=>`<button data-sc="${s}">${t}</button>`).join('')}</div>`,1)+
  sec('Partido',`${inp('Competición','comp')}${inp('Estadio','stadium')}<div class="two">${['h','a'].map(t=>`<div><b>${TN[t]}</b>${inp('Nombre',t+'.name')}${inp('Logo (URL)',t+'.logo','text','https://…')}<div class="two">${inp('Color 1',t+'.color','color')}${inp('Color 2',t+'.color2','color')}</div></div>`).join('')}</div>`)+
  sec('Alineaciones (JSON)',`<textarea id="jl" placeholder='{"h":[…],"a":[…],"hs":[…],"as":[…]}'></textarea><div class="row"><button data-a="loadlin">Cargar</button><button class="k" data-a="exlin">Ejemplo</button></div><label>Escala del panel<input type="range" min="0.5" max="1.2" step="0.05" data-k="lscale" value="${S.lscale}"></label>${inp('Narración: posición Y de los titulares','xiTop','number')}`)+
  sec('Reloj',`<div class="row"><button class="g" data-a="start">Iniciar</button><button data-a="pause">Pausar</button><button class="k" data-a="setmin">Fijar minuto</button><input id="min" type="number" value="0" style="width:80px"></div><div class="two">${inp('Tiempo (1T, 2T, ET…)','period')}${inp('Añadido (ej. 3)','added')}</div>`,1)+
  sec('Marcador y eventos',`<label>Jugador / texto (gol, tarjetas, subtítulo del VAR)<input id="who"></label>${evb('h')}${evb('a')}<div class="row"><b style="width:56px">VAR</b><button data-a="varon">Iniciar VAR</button><button class="k" data-a="varoff">Cerrar VAR</button><button class="k" data-a="reset">Reiniciar partido</button></div>`,1)+
  sec('Cambios',`${swb('h')}${swb('a')}`)+
  sec('Estadísticas (JSON)',`<textarea id="js" placeholder='[{"label":"Posesión","h":58,"a":42}]'></textarea><div class="row"><button data-a="loadst">Cargar</button><button class="k" data-a="exst">Ejemplo</button></div>`)+
- sec('Publicidad',`<label>Una por línea: URL de imagen o texto<textarea data-ads>${esc(S.ads.join('\n'))}</textarea></label><div class="two">${inp('Cada (seg)','adEvery','number')}${inp('Visible (seg)','adShow','number')}</div>${chk('Banner activo','adOn')}`+
- sec('Partes (vertical / TikTok)',`${chk('Marcador siempre visible','sbAlways')}<p style="font-size:13px;color:#9d97c9">Agrega cada URL como fuente de navegador con el tamaño indicado.</p>${PL.map(([n,z])=>`<label>${n} · ${z}<span class="row"><input readonly value="${B}?parte=${n}" onclick="this.select()" style="flex:1"><button class="k" data-a="copy" data-u="${B}?parte=${n}">Copiar</button></span></label>`).join('')}`)));
+ sec('Publicidad',`<label>Una por línea: URL de imagen o texto<textarea data-ads>${esc(S.ads.join('\n'))}</textarea></label><div class="two">${inp('Cada (seg)','adEvery','number')}${inp('Visible (seg)','adShow','number')}</div>${chk('Banner activo','adOn')}`)+
+ sec('Partes (vertical / TikTok)',`${chk('Marcador siempre visible','sbAlways')}<p style="font-size:13px;color:#9d97c9">Agrega cada URL como fuente de navegador con el tamaño indicado. Marcador, presentación y estadísticas se achican solas si la fuente es más angosta.</p>${PL.map(([n,z])=>`<label>${n} · ${z}<span class="row"><input readonly value="${B}?parte=${n}" onclick="this.select()" style="flex:1"><button class="k" data-a="copy" data-u="${B}?parte=${n}">Copiar</button></span></label>`).join('')}`));
  document.body.oninput=e=>{const t=e.target;if(t.dataset.k)set(t.dataset.k,t.type=='checkbox'?t.checked:(t.type=='number'||t.type=='range')?+t.value:t.value);
   if(t.dataset.ads!==undefined){S.ads=t.value.split('\n').map(x=>x.trim()).filter(Boolean);save()}};
  document.body.onclick=e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset,t=d.t,who=$('#who').value.trim();
@@ -217,5 +215,5 @@ function ctl(){document.body.className='ctl';
   else if(d.a=='loadlin'){try{const j=JSON.parse($('#jl').value);S.lin={h:j.h||j.home||[],a:j.a||j.away||[],hs:j.hs||[],as:j.as||[]};save();fillSubs()}catch(x){alert('JSON de alineaciones no válido')}}
   else if(d.a=='loadst'){try{S.stats=JSON.parse($('#js').value);save()}catch(x){alert('JSON de estadísticas no válido')}}};
  $('#ov').remove();fillSubs();render()}
-if(CTL)ctl();render();
+if(CTL)ctl();render();if(PART)addEventListener('resize',render);
 </script></body></html>
