@@ -7,6 +7,11 @@
 *{box-sizing:border-box;margin:0}
 html,body{background:transparent;font-family:Antonio,sans-serif;color:#fff}
 #ov{width:1920px;height:1080px;position:relative;overflow:hidden}
+body.pt{overflow:hidden}body.pt #ov{width:100vw;height:100vh}
+body.pt .sb{top:0}body.pt .xi{position:static!important;width:340px}
+body.pt:not(.pt-alertas) #var,body.pt:not(.pt-alertas) #card,body.pt:not(.pt-alertas) #fx,body.pt:not(.pt-banner) #ad,body.pt #cap{display:none!important}
+body.pt-banner #ad{left:0;bottom:auto;top:0;transform:none!important}
+body.pt-alertas #card{top:20px}body.pt-alertas #var{top:30%}
 #sc{position:absolute;inset:0}
 @keyframes rise{from{opacity:0;margin-top:70px}}
 #sc.on>*{animation:rise .8s cubic-bezier(.2,.8,.2,1)}
@@ -24,10 +29,10 @@ html,body{background:transparent;font-family:Antonio,sans-serif;color:#fff}
 .lin{display:flex;gap:18px;align-items:flex-start;--s:80px;background:none;box-shadow:none;transform:translate(-50%,-50%) scale(var(--z,1))}
 .col{width:400px;background:linear-gradient(#1d1650,#120e33);border-top:10px solid var(--c1)}
 .col .hd{display:flex;align-items:center;gap:16px;padding:14px 20px;font:800 44px/1 'Big Shoulders Display';border-bottom:4px solid var(--c2)}
-.subs{width:260px;background:#120e33dd;border-top:6px solid var(--c2)}
-.hs{padding:10px 16px;font:700 22px Antonio;color:var(--c);letter-spacing:.08em;text-transform:uppercase}
+.subs{width:300px;background:#120e33f2;border-top:6px solid var(--c2)}
+.hs{padding:10px 16px;font:700 26px Antonio;color:var(--c);letter-spacing:.08em;text-transform:uppercase}
 p.r0,.col p,.xi p,.subs p{display:flex;align-items:center;gap:12px;padding:6px 20px;font:500 31px Antonio;border-top:1px solid #ffffff18;white-space:nowrap}
-.subs p{font-size:23px;padding:5px 16px;color:#cfcbe8}
+.subs p{font-size:28px;padding:5px 16px;color:#e6e3f7}
 p em{font-style:normal;width:40px;flex:none;color:var(--c);font-weight:700}
 p em.up{color:#3ddc84}
 p.out{text-decoration:line-through;opacity:.45}
@@ -37,20 +42,19 @@ p.out{text-decoration:line-through;opacity:.45}
 .sb .side{position:relative;width:380px;font:700 42px Antonio}
 .sb .side.r{flex-direction:row-reverse}
 .side::after{content:'';position:absolute;left:0;right:0;bottom:0;height:8px;background:linear-gradient(90deg,var(--c1) 50%,var(--c2) 50%)}
-.sb .sc{font:800 72px 'Big Shoulders Display';background:var(--p);width:96px;justify-content:center;padding:0}
-.sb .mid{flex-direction:column;justify-content:center;gap:0;background:var(--g);color:var(--d);min-width:190px;padding:0 14px}
+.sb .sc{position:relative;font:800 72px 'Big Shoulders Display';background:var(--p);width:96px;justify-content:center;padding:0}
+.sb .mid{flex-direction:column;justify-content:center;gap:0;background:var(--g);color:var(--d);min-width:210px;padding:0 14px}
 .tm2{display:flex;align-items:center;gap:10px}.tm2 b{font:800 46px/1 'Big Shoulders Display'}
-.mid small{font:700 22px Antonio}
+.mid small{font:700 30px/1 Antonio;letter-spacing:.04em}
 .add{background:#ffd321;color:#222;font:800 30px Antonio;padding:0 10px;border-radius:4px;animation:bl 1.2s infinite alternate}
 @keyframes bl{from{box-shadow:0 0 0 #ffd321}to{box-shadow:0 0 18px #ffd321}}
-.cnt{position:absolute;top:100%;left:0;margin-top:8px;display:flex;gap:6px}
-.side.r .cnt{left:auto;right:0}
-.chip{display:grid;place-items:center;min-width:36px;height:46px;padding:0 8px;border-radius:4px;font:800 28px Antonio;font-style:normal;color:#222}
+.cnt{position:absolute;top:100%;left:50%;transform:translateX(-50%);display:flex;z-index:2}
+.chip{display:grid;place-items:center;min-width:30px;height:26px;padding:0 7px;border-radius:0 0 5px 5px;font:800 19px Antonio;font-style:normal;color:#222}
 .chip.y,.cd.yellow{background:#ffd321}.chip.r,.cd.red{background:#e5262b;color:#fff}
 .xi{position:absolute;top:150px;width:340px;background:#17123dee;border-top:8px solid var(--c1);--s:60px}
 .xi.l{left:24px}.xi.r{right:24px}
 .xi .hd{display:flex;align-items:center;gap:12px;padding:10px 16px;font:700 32px Antonio;border-bottom:4px solid var(--c2)}
-.xi p{font-size:27px;padding:5px 16px;gap:10px}
+.xi p{font-size:26px;padding:4px 16px;gap:10px}
 .xi em{width:34px}
 #cap{position:absolute;border:4px solid var(--c);display:none;box-shadow:0 0 0 2px var(--d)}
 #cap.g{background:#25c2ff22;place-items:center;font:700 40px Antonio;color:var(--c)}
@@ -65,7 +69,7 @@ p.out{text-decoration:line-through;opacity:.45}
 .ht{width:1100px;--s:80px}
 .ht .hd{display:flex;justify-content:space-between;align-items:center;padding:20px 36px;font:800 52px 'Big Shoulders Display'}
 .ht .hd div{display:flex;align-items:center;gap:18px}
-.r{display:grid;grid-template-columns:90px 1fr 280px 1fr 90px;align-items:center;gap:14px;padding:11px 28px;font:500 32px Antonio;text-align:center}
+.sr{display:grid;grid-template-columns:90px 1fr 280px 1fr 90px;align-items:center;gap:14px;padding:11px 28px;font:500 32px Antonio;text-align:center}
 .bar{height:16px;background:#ffffff1c;display:flex;justify-content:flex-end}.bar.rt{justify-content:flex-start}.bar i{height:100%}
 /* VAR */
 #var{position:absolute;left:50%;top:400px;transform:translateX(-50%) scale(.8);opacity:0;transition:.4s;pointer-events:none}
@@ -104,11 +108,12 @@ body.ctl{background:#0f0c2b;font:16px/1.4 Antonio,sans-serif;padding:10px;max-wi
 <div id="ov"><div id="sc"></div><div id="cap"></div><div id="var"></div><div id="card"></div><div id="ad"></div><div id="fx"></div></div>
 <script>
 const K='sporteros_futbol_v1',CTL=location.search.includes('control');
+const PART=CTL?null:new URLSearchParams(location.search).get('parte');if(PART)document.body.classList.add('pt','pt-'+PART);
 const $=s=>document.querySelector(s),esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const D={scene:'none',comp:'Liga 1 · Fecha 12',stadium:'Estadio Nacional',
 h:{name:'Equipo Local',logo:'',color:'#604ee2',color2:'#25c2ff'},a:{name:'Equipo Visita',logo:'',color:'#25c2ff',color2:'#edeced'},
 sh:0,sa:0,cards:{h:{y:0,r:0},a:{y:0,r:0}},period:'1T',added:'',clock:{base:0,t0:null},
-lin:{h:[],a:[],hs:[],as:[]},stats:[],lscale:1,capOn:false,capGuide:false,cx:460,cy:230,cw:1000,ch:560,
+lin:{h:[],a:[],hs:[],as:[]},stats:[],lscale:1,xiTop:470,sbAlways:false,capOn:false,capGuide:false,cx:460,cy:230,cw:1000,ch:560,
 ads:[],adEvery:60,adShow:10,adOn:false,varOn:false,varTxt:'',ev:{id:0}};
 const load=j=>{const s=JSON.parse(j||'{}');return {...D,...s,h:{...D.h,...s.h},a:{...D.a,...s.a},cards:{...D.cards,...s.cards},lin:{...D.lin,...s.lin}}};
 let S=load(localStorage.getItem(K));
@@ -125,10 +130,13 @@ const cnt=t=>{const c=S.cards[t];return `<div class="cnt">${c.y?`<i class="chip 
 const SC={
 pres:()=>`<div class="mid-c pres"><div class="tt">${esc(S.comp)}</div><div class="vs"><div class="tm">${lg(S.h)}<b>${esc(S.h.name)}</b></div><span class="v">VS</span><div class="tm">${lg(S.a)}<b>${esc(S.a.name)}</b></div></div><div class="st">${esc(S.stadium)}</div></div>`,
 lin:()=>`<div class="mid-c lin" style="--z:${S.lscale}">${sbp('h')}${col('h')}${col('a')}${sbp('a')}</div>`,
-play:()=>`<div class="sb"><div class="side" ${th(S.h)}>${lg(S.h)}${esc(S.h.name)}${cnt('h')}</div><div class="sc">${S.sh}</div><div class="mid"><div class="tm2"><b id="clk"></b>${S.added?`<span class="add">+${esc(String(S.added).replace(/^\+/,''))}</span>`:''}</div><small>${esc(S.period)}</small></div><div class="sc">${S.sa}</div><div class="side r" ${th(S.a)}>${lg(S.a)}${esc(S.a.name)}${cnt('a')}</div></div>`+
- ['h','a'].map((t,i)=>`<div class="xi ${i?'r':'l'}" ${th(S[t])}><div class="hd">${lg(S[t])}${esc(S[t].name)}</div>${xi(t)}</div>`).join(''),
+play:()=>`<div class="sb"><div class="side" ${th(S.h)}>${lg(S.h)}${esc(S.h.name)}</div><div class="sc">${S.sh}${cnt('h')}</div><div class="mid"><div class="tm2"><b id="clk"></b>${S.added?`<span class="add">+${esc(String(S.added).replace(/^\+/,''))}</span>`:''}</div><small>${esc(S.period)}</small></div><div class="sc">${S.sa}${cnt('a')}</div><div class="side r" ${th(S.a)}>${lg(S.a)}${esc(S.a.name)}</div></div>`+
+ ['h','a'].map((t,i)=>`<div class="xi ${i?'r':'l'}" style="${cs(S[t])};top:${S.xiTop}px"><div class="hd">${lg(S[t])}${esc(S[t].name)}</div>${xi(t)}</div>`).join(''),
 ht:()=>`<div class="mid-c ht"><div class="tt">${esc(S.comp)} · Entretiempo ${S.sh} - ${S.sa}</div><div class="hd"><div>${lg(S.h)}${esc(S.h.name)}</div><div>${esc(S.a.name)}${lg(S.a)}</div></div>`+
- S.stats.map(r=>{const a=parseFloat(r.h)||0,b=parseFloat(r.a)||0,p=a+b?a/(a+b)*100:50;return `<div class="r"><b>${esc(r.h)}</b><div class="bar"><i style="width:${p}%;background:linear-gradient(90deg,${esc(S.h.color2)},${esc(S.h.color)})"></i></div><span>${esc(r.label)}</span><div class="bar rt"><i style="width:${100-p}%;background:linear-gradient(90deg,${esc(S.a.color)},${esc(S.a.color2)})"></i></div><b>${esc(r.a)}</b></div>`}).join('')+`<div style="height:20px"></div></div>`};
+ S.stats.map(r=>{const a=parseFloat(r.h)||0,b=parseFloat(r.a)||0,p=a+b?a/(a+b)*100:50;return `<div class="sr"><b>${esc(r.h)}</b><div class="bar"><i style="width:${p}%;background:linear-gradient(90deg,${esc(S.h.color2)},${esc(S.h.color)})"></i></div><span>${esc(r.label)}</span><div class="bar rt"><i style="width:${100-p}%;background:linear-gradient(90deg,${esc(S.a.color)},${esc(S.a.color2)})"></i></div><b>${esc(r.a)}</b></div>`}).join('')+`<div style="height:20px"></div></div>`};
+const pl=()=>{const t=document.createElement('div');t.innerHTML=SC.play();return[...t.children].map(e=>e.outerHTML)};
+const PT={marcador:()=>pl()[0],'titulares-local':()=>pl()[1],'titulares-visita':()=>pl()[2],alineaciones:SC.lin,presentacion:SC.pres,estadisticas:SC.ht};
+const VIS=p=>({marcador:S.scene=='play'||S.sbAlways,'titulares-local':S.scene=='play','titulares-visita':S.scene=='play',alineaciones:S.scene=='lin',presentacion:S.scene=='pres',estadisticas:S.scene=='ht'})[p];
 function tick(){const c=$('#clk');if(c)c.textContent=fmt(S.clock.base+(S.clock.t0?(Date.now()-S.clock.t0)/1000:0))}
 setInterval(()=>{if(!CTL)tick()},250);
 function fx(e){const t=S[e.side]||S.h;
@@ -145,13 +153,14 @@ function ads(){clearInterval(at);clearTimeout(ah);const a=$('#ad');a.classList.r
  go();at=setInterval(go,Math.max(S.adEvery,S.adShow+2)*1000)}
 function render(){
  if(CTL){document.querySelectorAll('[data-sc]').forEach(b=>b.classList.toggle('on',b.dataset.sc==S.scene));return}
- const sc=$('#sc');sc.innerHTML=SC[S.scene]?SC[S.scene]():'';
- if(S.scene!==prev){prev=S.scene;sc.className='';void sc.offsetWidth;sc.className='on';setTimeout(()=>sc.className='',1300)}
- const cp=$('#cap'),show=S.scene=='play'&&S.capOn;cp.style.display=show?(S.capGuide?'grid':'block'):'none';
+ const sc=$('#sc'),vis=PART?!!VIS(PART):!!SC[S.scene],key=PART?+vis:S.scene;
+ sc.innerHTML=PART?(vis&&PT[PART]?PT[PART]():''):(SC[S.scene]?SC[S.scene]():'');
+ if(key!==prev){prev=key;sc.className='';void sc.offsetWidth;sc.className='on';setTimeout(()=>sc.className='',1300)}
+ const cp=$('#cap'),show=S.scene=='play'&&S.capOn&&!PART;cp.style.display=show?(S.capGuide?'grid':'block'):'none';
  Object.assign(cp.style,{left:S.cx+'px',top:S.cy+'px',width:S.cw+'px',height:S.ch+'px'});cp.className=S.capGuide?'g':'';cp.textContent=S.capGuide?'Captura AiScore / 365Scores':'';
  const v=$('#var');if(S.varOn){if(!v.classList.contains('on')||v.dataset.t!==S.varTxt){v.innerHTML=`<div class="vb"><b>VAR</b><span>${esc(S.varTxt||'Revisión en curso')}</span><i></i></div>`;v.dataset.t=S.varTxt;v.classList.add('on')}}else v.classList.remove('on');
- const ak=JSON.stringify([S.adOn,S.ads,S.adEvery,S.adShow]);if(ak!==lastAk){lastAk=ak;ads()}
- if(S.ev.id!==lastEv){const fresh=lastEv!==null&&Date.now()-S.ev.id<8000;lastEv=S.ev.id;if(fresh)fx(S.ev)}
+ const ak=JSON.stringify([S.adOn,S.ads,S.adEvery,S.adShow]);if(ak!==lastAk){lastAk=ak;if(!PART||PART=='banner')ads()}
+ if(S.ev.id!==lastEv){const fresh=lastEv!==null&&Date.now()-S.ev.id<8000;lastEv=S.ev.id;if(fresh&&(!PART||PART=='alertas'))fx(S.ev)}
  tick()}
 /* ---------- panel de control ---------- */
 const get=k=>k.split('.').reduce((o,x)=>o[x],S);
@@ -160,6 +169,7 @@ const inp=(l,k,ty='text',ph='')=>`<label>${l}<input type="${ty}" data-k="${k}" v
 const chk=(l,k)=>`<label><input type="checkbox" data-k="${k}" ${get(k)?'checked':''}> ${l}</label>`;
 const sec=(t,b,o)=>`<details ${o?'open':''}><summary>${t}</summary><div>${b}</div></details>`;
 const TN={h:'Local',a:'Visita'};
+const B=location.href.split(/[?#]/)[0],PL=[['marcador','1200×130'],['titulares-local','340×540'],['titulares-visita','340×540'],['alineaciones','1480×800'],['presentacion','1260×500'],['estadisticas','1120×560'],['banner','920×130'],['alertas','el tamaño de tu escena']];
 const EX_LIN='{"h":[{"n":1,"name":"Portero"},{"n":2,"name":"Lateral D."},{"n":4,"name":"Central"},{"n":5,"name":"Central"},{"n":3,"name":"Lateral I."},{"n":6,"name":"Volante"},{"n":8,"name":"Interior"},{"n":10,"name":"Enganche (C)"},{"n":7,"name":"Extremo"},{"n":9,"name":"Delantero"},{"n":11,"name":"Extremo"}],"a":[],"hs":[{"name":"Suplente 1"},{"name":"Suplente 2"}],"as":[]}';
 const EX_ST='[{"label":"Posesión","h":58,"a":42},{"label":"Tiros","h":9,"a":5},{"label":"Tiros al arco","h":4,"a":2},{"label":"Córners","h":6,"a":3},{"label":"Faltas","h":7,"a":10}]';
 function fillSubs(){['h','a'].forEach(t=>{const f=(S.lin[t]||[]).slice(0,11),b=S.lin[t+'s']||[];
@@ -174,9 +184,10 @@ function ctl(){document.body.className='ctl';
  sec('Reloj',`<div class="row"><button class="g" data-a="start">Iniciar</button><button data-a="pause">Pausar</button><button class="k" data-a="setmin">Fijar minuto</button><input id="min" type="number" value="0" style="width:80px"></div><div class="two">${inp('Tiempo (1T, 2T, ET…)','period')}${inp('Añadido (ej. 3)','added')}</div>`,1)+
  sec('Cambios',`${swb('h')}${swb('a')}`)+
  sec('Partido',`${inp('Competición','comp')}${inp('Estadio','stadium')}<div class="two">${['h','a'].map(t=>`<div><b>${TN[t]}</b>${inp('Nombre',t+'.name')}${inp('Logo (URL)',t+'.logo','text','https://…')}<div class="two">${inp('Color 1',t+'.color','color')}${inp('Color 2',t+'.color2','color')}</div></div>`).join('')}</div>`)+
- sec('Alineaciones (JSON)',`<textarea id="jl" placeholder='{"h":[…],"a":[…],"hs":[…],"as":[…]}'></textarea><div class="row"><button data-a="loadlin">Cargar</button><button class="k" data-a="exlin">Ejemplo</button></div><label>Escala del panel<input type="range" min="0.5" max="1.2" step="0.05" data-k="lscale" value="${S.lscale}"></label>`)+
+ sec('Alineaciones (JSON)',`<textarea id="jl" placeholder='{"h":[…],"a":[…],"hs":[…],"as":[…]}'></textarea><div class="row"><button data-a="loadlin">Cargar</button><button class="k" data-a="exlin">Ejemplo</button></div><label>Escala del panel<input type="range" min="0.5" max="1.2" step="0.05" data-k="lscale" value="${S.lscale}"></label>${inp('Narración: posición Y de los titulares','xiTop','number')}`)+
  sec('Estadísticas (JSON)',`<textarea id="js" placeholder='[{"label":"Posesión","h":58,"a":42}]'></textarea><div class="row"><button data-a="loadst">Cargar</button><button class="k" data-a="exst">Ejemplo</button></div>`)+
  sec('Zona de captura',`${chk('Mostrar marco en Narración','capOn')}${chk('Relleno guía (para ubicar, luego desactivar)','capGuide')}<div class="four">${inp('X','cx','number')}${inp('Y','cy','number')}${inp('Ancho','cw','number')}${inp('Alto','ch','number')}</div>`)+
+ sec('Partes (vertical / TikTok)',`${chk('Marcador siempre visible','sbAlways')}<p style="font-size:13px;color:#9d97c9">Agrega cada URL como fuente de navegador con el tamaño indicado.</p>${PL.map(([n,z])=>`<label>${n} · ${z}<span class="row"><input readonly value="${B}?parte=${n}" onclick="this.select()" style="flex:1"><button class="k" data-a="copy" data-u="${B}?parte=${n}">Copiar</button></span></label>`).join('')}`)+
  sec('Publicidad',`<label>Una por línea: URL de imagen o texto<textarea data-ads>${esc(S.ads.join('\n'))}</textarea></label><div class="two">${inp('Cada (seg)','adEvery','number')}${inp('Visible (seg)','adShow','number')}</div>${chk('Banner activo','adOn')}`));
  document.body.oninput=e=>{const t=e.target;if(t.dataset.k)set(t.dataset.k,t.type=='checkbox'?t.checked:(t.type=='number'||t.type=='range')?+t.value:t.value);
   if(t.dataset.ads!==undefined){S.ads=t.value.split('\n').map(x=>x.trim()).filter(Boolean);save()}};
@@ -198,6 +209,7 @@ function ctl(){document.body.className='ctl';
   else if(d.a=='setmin'){S.clock.base=(+$('#min').value||0)*60;if(S.clock.t0)S.clock.t0=Date.now();save()}
   else if(d.a=='sub'){const f=S.lin[t],s=S.lin[t+'s'],i=$('#o'+t).value,j=$('#i'+t).value;if(i===''||j===''||!f[i]||!s[j])return;
    const o=f[i],n=s[j];f[i]={n:'',name:n.name,in:1};s[j]={...o,out:1};ev('sub',t,n.name+'|'+o.name);fillSubs()}
+  else if(d.a=='copy'){const u=d.u;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).catch(()=>prompt('Copia la URL:',u))}
   else if(d.a=='exlin')$('#jl').value=EX_LIN;
   else if(d.a=='exst')$('#js').value=EX_ST;
   else if(d.a=='loadlin'){try{const j=JSON.parse($('#jl').value);S.lin={h:j.h||j.home||[],a:j.a||j.away||[],hs:j.hs||[],as:j.as||[]};save();fillSubs()}catch(x){alert('JSON de alineaciones no válido')}}
