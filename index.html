@@ -106,7 +106,11 @@ body.ctl{background:#0f0c2b;font:16px/1.4 Antonio,sans-serif;padding:10px;max-wi
 .ctl button{padding:8px 14px;background:var(--p);color:#fff;border:0;font:700 16px Antonio;cursor:pointer}
 .ctl button.on{background:var(--c);color:var(--d)}.ctl button.g{background:#2a7a3b}.ctl button.y{background:#ffd321;color:#222}.ctl button.r{background:#e5262b}.ctl button.k{background:#3d3490}
 .ctl .hint{font-size:13px;color:#9d97c9;min-height:18px}
-</style></head><body>
+</style>
+<script>
+if(/[?&]reset/.test(location.search))try{localStorage.removeItem('sporteros_futbol_v1')}catch(e){}
+addEventListener('error',e=>{if(!/control|debug/.test(location.search))return;const d=document.createElement('div');d.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99999;background:#e5262b;color:#fff;font:14px monospace;padding:8px;white-space:pre-wrap';d.textContent='Error: '+e.message+(e.lineno?' (línea '+e.lineno+')':'');(document.body||document.documentElement).appendChild(d)});
+</script></head><body>
 <div id="ov"><div id="sc"></div><div id="var"></div><div id="card"></div><div id="ad"></div><div id="fx"></div></div>
 <script>
 const K='sporteros_futbol_v1',CTL=location.search.includes('control');
@@ -165,12 +169,21 @@ function render(){
  if(S.ev.id!==lastEv){const fresh=lastEv!==null&&Date.now()-S.ev.id<8000;lastEv=S.ev.id;if(fresh&&(!PART||PART=='alertas'))fx(S.ev)}
  tick()}
 /*P*/
-const cl=x=>x.replace(/[\p{Extended_Pictographic}\u{1F1E6}-\u{1F1FF}\u{E0020}-\u{E007F}\uFE0F\u200B-\u200D\uFEFF]/gu,'').replace(/\u00a0/g,' ').trim();
+const cl=x=>x.replace(/[\u{1F300}-\u{1FAFF}\u{1F1E6}-\u{1F1FF}\u{2600}-\u{27BF}\u{E0020}-\u{E007F}\uFE0F\u200B-\u200D\uFEFF]/gu,'').replace(/\u00a0/g,' ').trim();
 const PAIS='Argentina|Bolivia|Brasil|Chile|Colombia|Ecuador|Paraguay|Perú|Uruguay|Venezuela|México|Costa Rica|Panamá|Honduras|Guatemala|El Salvador|Cuba|Haití|Jamaica|República Dominicana|Puerto Rico|Estados Unidos|EE.UU.|Canadá|España|Portugal|Francia|Italia|Alemania|Inglaterra|Escocia|Gales|Irlanda del Norte|Irlanda|Países Bajos|Holanda|Bélgica|Suiza|Austria|Croacia|Serbia|Eslovenia|Eslovaquia|Chequia|República Checa|Hungría|Polonia|Ucrania|Rusia|Rumania|Bulgaria|Grecia|Turquía|Dinamarca|Suecia|Noruega|Finlandia|Islandia|Albania|Kosovo|Montenegro|Macedonia del Norte|Bosnia y Herzegovina|Georgia|Armenia|Israel|Marruecos|Argelia|Túnez|Egipto|Senegal|Nigeria|Ghana|Costa de Marfil|Camerún|Mali|Guinea Ecuatorial|Guinea|Gabón|Congo|RD Congo|Angola|Sudáfrica|Cabo Verde|Burkina Faso|Japón|Corea del Sur|China|Irán|Irak|Arabia Saudita|Australia|Nueva Zelanda|Trinidad y Tobago|Surinam|Curazao'.split('|').sort((a,b)=>b.length-a.length);
 const noPais=n=>{for(const q of PAIS)if(n.length>q.length&&n.endsWith(q))return n.slice(0,-q.length).trim();return n};
 const nm=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
 function parseLin(txt,cut){
  const L=txt.split(/\r?\n/).map(cl).filter(Boolean),si=L.findIndex(x=>nm(x)=='suplentes'),st=[],sb=[];
+ const SEC={local:'h',visita:'a',visitante:'a','suplentes local':'hs','suplentes visita':'as','suplentes visitante':'as'};
+ if(L.filter(x=>SEC[nm(x)]).length>=2){const lin={h:[],a:[],hs:[],as:[]};let k=null;
+  L.forEach(x=>{if(SEC[nm(x)]){k=SEC[nm(x)];return}if(!k)return;
+   if(/^(\([GC]\))+$/.test(x)){const p=lin[k][lin[k].length-1];if(p&&x.includes('(C)')&&!/\(C\)/.test(p.name))p.name+=' (C)';return}
+   const m=x.match(/^(\d{1,3})?[\s.\-]*(\S.*)$/);if(!m)return;const name=noPais(m[2].replace(/\s*\(G\)/g,'').trim());lin[k].push(m[1]?{n:+m[1],name}:{name})});
+  if(!lin.h.length&&!lin.a.length)throw new Error('sin jugadores');
+  let msg=`✔ Titulares ${lin.h.length} + ${lin.a.length} · suplentes ${lin.hs.length} / ${lin.as.length}`;
+  if(lin.h.length!=11||lin.a.length!=11)msg+=' · ⚠ se esperaban 11 titulares por equipo';
+  return{lin,msg}}
  L.forEach((x,i)=>{const md=/\]\(/.test(x),y=x.replace(/\[([^\]]*)\]\([^)]*\)/g,'$1').trim(),arr=si>=0&&i>si?sb:st;
   if(/^(\([GC]\))+$/.test(y)){const p=arr[arr.length-1];if(p&&y.includes('(C)'))p.name+=' (C)';return}
   const m=y.match(md?/^(\d{1,3})?\s*(\S.*)$/:/^(\d{1,3})\s*(\D.*)$/);if(!m)return;
